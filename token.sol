@@ -11,7 +11,7 @@ function balanceOf(address _owner) constant returns (uint256 balance) {}
 /// @param _to The address of the recipient
 /// @param _value The amount of token to be transferred
 /// @return Whether the transfer was successful or not
-function transferFromTo(address _from, address _to, uint256 _value) returns (bool success) {}
+function transfer(address _to, uint256 _value) returns (bool success) {}
 
 /// @notice send `_value` token to `_to` from `_from` on the condition it is approved by `_from`
 /// @param _from The address of the sender
@@ -38,15 +38,15 @@ event Approval(address indexed _owner, address indexed _spender, uint256 _value)
 
 contract StandardToken is Token {
 
-function transferFromTo(address _from, address _to, uint256 _value) returns (bool success) {
+function transfer(address _to, uint256 _value) returns (bool success) {
 //Default assumes totalSupply can’t be over max (2^256 – 1).
 //If your token leaves out totalSupply and can issue more tokens as time goes on, you need to check if it doesn’t wrap.
 //Replace the if with this one instead.
 //if (balances[msg.sender] >= _value && balances[_to] + _value > balances[_to]) {
-if (balances[_from] >= _value && _value > 0) {
-balances[_from] -= _value;
+if (balances[msg.sender] >= _value && _value > 0) {
+balances[msg.sender] -= _value;
 balances[_to] += _value;
-Transfer(_from, _to, _value);
+Transfer(msg.sender, _to, _value);
 return true;
 } else { return false; }
 }
@@ -110,8 +110,8 @@ string public version = 'H1.0'; //human 0.1 standard. Just an arbitrary versioni
 
 function ERC20Token(
 ) {
-balances[msg.sender] = 1000000; // Give the creator all initial tokens (100000 for example)
-totalSupply = 1000000; // Update total supply (100000 for example)
+balances[msg.sender] = 100000; // Give the creator all initial tokens (100000 for example)
+totalSupply = 100000; // Update total supply (100000 for example)
 name = 'test'; // Set the name for display purposes
 decimals = 0; // Amount of decimals for display purposes
 symbol = 'test'; // Set the symbol for display purposes
